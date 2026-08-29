@@ -1,0 +1,12 @@
+# Customer SDK defaults. Board pins are baked into board_bsp.a.
+CONFIG_IDF_TARGET="esp32s3"
+
+# Hub themes load PNG icons via SPIFFS + LVGL FS letter S: (must match hub_icons.c)
+CONFIG_APP_USE_SPIFFS_UI_ASSETS=y
+CONFIG_LV_USE_FS_POSIX=y
+CONFIG_LV_FS_POSIX_LETTER=83
+CONFIG_LV_FS_POSIX_PATH="/spiffs"
+CONFIG_LV_FS_POSIX_CACHE_SIZE=32768
+CONFIG_LV_USE_PNG=y
+CONFIG_LV_IMG_CACHE_DEF_SIZE=16
+CONFIG_LV_FONT_SIMSUN_16_CJK=y

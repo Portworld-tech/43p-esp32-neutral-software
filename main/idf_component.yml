@@ -1,0 +1,18 @@
+## IDF Component Manager Manifest File
+## Customer SDK: LCD/touch/LVGL + NCA9555 expander (required by closed board_bsp.a)
+dependencies:
+  esp_lcd_panel_io_additions:
+    version: ^1
+  esp_lcd_st7701:
+    version: '*'
+  esp_lcd_touch_gt911:
+    version: '*'
+  espressif/esp_lvgl_port:
+    version: ^2
+    public: true
+  lvgl/lvgl:
+    version: 8.4.*
+    public: true
+  espressif/ch390: ^0.4.0
+  espressif/esp_io_expander: "^1.2.0"
+  espressif/esp_io_expander_tca95xx_16bit: "^2.0.2"

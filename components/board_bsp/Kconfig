@@ -1,0 +1,76 @@
+menu "Withthewind board: NCA9555 IO expander"
+
+    config BOARD_IO_EXPANDER_ENABLE
+        bool "Use NCA9555 / TCA9555 IO expander"
+        default y
+
+    config BOARD_IO_EXPANDER_I2C_ADDRESS
+        hex "IO expander 7-bit I2C address"
+        depends on BOARD_IO_EXPANDER_ENABLE
+        default 0x20
+
+    config BOARD_BACKLIGHT_VIA_IO_EXPANDER
+        bool "Backlight on expander (legacy software PWM)"
+        depends on BOARD_IO_EXPANDER_ENABLE
+        default n
+        help
+            Closed board_bsp.a is built with MCU GPIO4 LEDC. Leave this off.
+
+    config BOARD_BACKLIGHT_PWM_GPIO_NUM
+        int "Backlight MCU GPIO (LEDC)"
+        depends on !BOARD_BACKLIGHT_VIA_IO_EXPANDER
+        default 4
+        range -1 48
+
+    config BOARD_BACKLIGHT_LEDC_FREQ_HZ
+        int "Backlight LEDC PWM frequency (Hz)"
+        depends on !BOARD_BACKLIGHT_VIA_IO_EXPANDER
+        default 5000
+        range 250 20000
+
+    config BOARD_BACKLIGHT_MIN_PERCENT
+        int "Minimum applied backlight when ON (percent)"
+        default 10
+        range 1 90
+
+    config BOARD_BEEP_VIA_IO_EXPANDER
+        bool "Buzzer on IO expander pin"
+        depends on BOARD_IO_EXPANDER_ENABLE
+        default y
+
+    config BOARD_BEEP_EXPANDER_PIN
+        int "Buzzer expander pin index (0-15)"
+        depends on BOARD_IO_EXPANDER_ENABLE && BOARD_BEEP_VIA_IO_EXPANDER
+        default 9
+        range 0 15
+
+    config BOARD_GPIO_OUT_EXPANDER_PIN
+        int "Port1 GPIO_OUT expander pin index (0-15)"
+        depends on BOARD_IO_EXPANDER_ENABLE
+        default 8
+        range 0 15
+
+endmenu
+
+menu "Withthewind board: RGB / LVGL display"
+
+    config BSP_LCD_RGB_BUFFER_NUMS
+        int "RGB panel frame buffer count"
+        default 3
+        range 2 3
+
+    config BSP_LCD_RGB_BOUNCE_BUFFER_HEIGHT
+        int "RGB bounce buffer height in lines (must divide 480)"
+        default 40
+        range 40 120
+
+    config BSP_DISPLAY_LVGL_AVOID_TEAR
+        bool "LVGL full-frame RGB avoid tearing"
+        default y
+
+    config BSP_DISPLAY_LVGL_BUF_HEIGHT
+        int "LVGL draw buffer height when avoid-tear is off"
+        default 100
+        range 40 480
+
+endmenu

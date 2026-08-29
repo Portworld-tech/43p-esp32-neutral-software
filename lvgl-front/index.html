@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OEM Hub UI Kit · 480×480</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="lvgl-theme.css" />
+<link rel="stylesheet" href="lvgl-themes.css" />
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="lvgl-icons.jsx"></script>
+<script type="text/babel" src="lvgl-thermostat.jsx"></script>
+<script type="text/babel" src="lvgl-widgets.jsx"></script>
+<script type="text/babel" src="lvgl-pages.jsx"></script>
+<script type="text/babel" src="lvgl-hub-templates.jsx"></script>
+<script type="text/babel" src="lvgl-hub-model.jsx"></script>
+<script type="text/babel" src="lvgl-basic-pages.jsx"></script>
+<script type="text/babel" src="lvgl-theme-hubs.jsx"></script>
+<script type="text/babel" src="lvgl-hub-app.jsx"></script>
+
+<script type="text/babel">
+function Cell({ w, h, children, pad = 12 }) {
+  return (
+    <div style={{ width: w, height: h, background: "var(--bg-deep)", padding: pad, display: "flex" }}>
+      <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
+    </div>
+  );
+}
+
+function ThemedArtboard({ theme, label, children, w = 480, h = 480 }) {
+  return (
+    <DCArtboard id={"th-" + theme + "-" + label} label={label} width={w} height={h} style={{ background: "transparent" }}>
+      <ThemeScope theme={theme}>{children}</ThemeScope>
+    </DCArtboard>
+  );
+}
+
+function LiveKitScreen({ theme, HomeView }) {
+  const hub = useHub();
+  const pager = ["home", "room", "scenes", "energy"];
+  const idx = pager.indexOf(hub.route);
+  const swipe = (d) => {
+    if (idx < 0) return;
+    hub.go(pager[(idx + d + pager.length) % pager.length]);
+  };
+  const gestureOk = idx >= 0 && hub.route !== "room" && !hub.wifiJoin;
+  return (
+    <ThemeScope theme={theme} style={{
+      position: "relative", width: 480, height: 480,
+      filter: hub.screenFilter, transition: "filter 0.25s ease",
+    }}>
+      <SwipeSurface
+        enabled={gestureOk}
+        onSwipeLeft={() => swipe(1)}
+        onSwipeRight={() => swipe(-1)}
+        style={{ height: "100%" }}
+      >
+        <HubRouteView theme={theme} HomeView={HomeView} />
+      </SwipeSurface>
+      {hub.wifiJoin && (
+        <div style={{ position: "absolute", inset: 0, zIndex: 45 }}>
+          <WifiJoinSheet />
+        </div>
+      )}
+      <HubToast />
+    </ThemeScope>
+  );
+}
+
+/** Kit artboard with hub state + route switching (home ↔ room ↔ …) */
+function LiveKit({ theme, label, route = "home", HomeView }) {
+  return (
+    <DCArtboard id={"kit-" + theme + "-" + label} label={label} width={480} height={480} style={{ background: "#111" }}>
+      <HubProvider initialRoute={route}>
+        <LiveKitScreen theme={theme} HomeView={HomeView} />
+      </HubProvider>
+    </DCArtboard>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection id="live" title="交互演示台 · 主题切换 + 手势导航"
+        subtitle="左右滑：总览↔房间↔情景↔能耗 · 房间内>6控件再滑翻页 · 左侧换主题 · 底部标签在屏外">
+        <DCArtboard id="live-panel" label="Hub chassis" width={720} height={640} style={{ background: "#12151a" }}>
+          <InteractiveChassis />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="themes" title="十套主题中枢（均可操作）"
+        subtitle="原六套 + Zen简约 / Pulse科技 / Bloom柔和 / Metro色块 · 布局与配色均不同 · 状态独立可点">
+        {THEME_META.map((t) => (
+          <DCArtboard
+            key={t.id}
+            id={"hub-" + t.id}
+            label={`${t.label} · ${t.desc}`}
+            width={480}
+            height={480}
+            style={{ background: "#111" }}
+          >
+            <ThemeLiveApp theme={t.id} />
+          </DCArtboard>
+        ))}
+      </DCSection>
+
+      <DCSection id="kits" title="功能模版（可套任意主题 · 已接状态）"
+        subtitle="A–J 业务页 + 设置 / 网络 / 日程基础页；控件随 data-theme 变化">
+        <LiveKit theme="slate" label="A Hub · Slate" HomeView={TplHubHome} />
+        <LiveKit theme="sand" label="A Hub · Sand" HomeView={TplHubHome} />
+        <LiveKit theme="ocean" label="B 房间 · Ocean" route="room" />
+        <LiveKit theme="dusk" label="B 房间 · Dusk" route="room" />
+        <LiveKit theme="ink" label="C 网关 · Ink" route="gateway" />
+        <LiveKit theme="forest" label="D 情景 · Forest" route="scenes" />
+        <LiveKit theme="ocean" label="E 能耗 · Ocean" route="energy" />
+        <LiveKit theme="slate" label="F 点表 · Slate" route="points" />
+        <LiveKit theme="dusk" label="G 安防 · Dusk" route="security" />
+        <LiveKit theme="sand" label="H 温控 · Sand" route="hvac" />
+        <LiveKit theme="ink" label="I 待机 · Ink" route="minimal" />
+        <LiveKit theme="forest" label="J 开关阵 · Forest" route="appliances" />
+        <LiveKit theme="zen" label="K 设置 · Zen" route="settings" />
+        <LiveKit theme="pulse" label="L 网络 · Pulse" route="network" />
+        <LiveKit theme="bloom" label="M 日程 · Bloom" route="schedule" />
+      </DCSection>
+
+      <DCSection id="layouts" title="布局骨架 · 随控件数量自适应"
+        subtitle="1→Single · 2→TwoV · 3→ThreeV · 4→Four · 5→Five(宽顶) · 6→Six · 房间页>6 左右滑翻页">
+        <ThemedArtboard theme="ink" label="Single · 1">
+          <PageShell title="Relay" dots={1} active={0}>
+            <AdaptiveGrid>
+              <OnOffWidget name="Main light" icon={<LIco.bulb />} on={true} page />
+            </AdaptiveGrid>
+          </PageShell>
+        </ThemedArtboard>
+        <ThemedArtboard theme="ocean" label="TwoV · 2">
+          <PageShell title="Climate" dots={2} active={0}>
+            <AdaptiveGrid>
+              <ThermostatArc name="Heating" ambient={21} setpoint={22} compact />
+              <ClimWidget name="AC" ambient={25} setpoint={24} mode="cool" compact wide />
+            </AdaptiveGrid>
+          </PageShell>
+        </ThemedArtboard>
+        <ThemedArtboard theme="dusk" label="ThreeV · 3">
+          <PageShell title="Room" dots={3} active={0}>
+            <AdaptiveGrid>
+              <OnOffWidget name="Main light" icon={<LIco.bulb />} on={true} />
+              <DimmerWidget name="Accent" level={45} />
+              <ClimWidget name="AC" ambient={25} setpoint={24} mode="cool" compact wide />
+            </AdaptiveGrid>
+          </PageShell>
+        </ThemedArtboard>
+        <ThemedArtboard theme="pulse" label="Four · 4">
+          <PageShell title="Room" dots={3} active={0}>
+            <AdaptiveGrid>
+              <OnOffWidget name="Light" icon={<LIco.bulb />} on={true} compact />
+              <DimmerWidget name="Dimmer" level={55} compact />
+              <CurtainWidget name="Curtain" position={60} compact />
+              <ShutterWidget name="Shutter" position={35} compact />
+            </AdaptiveGrid>
+          </PageShell>
+        </ThemedArtboard>
+        <ThemedArtboard theme="sand" label="Five · 5">
+          <PageShell title="Room" dots={3} active={0}>
+            <AdaptiveGrid>
+              <ClimWidget name="AC" ambient={25} setpoint={24} mode="cool" compact wide />
+              <OnOffWidget name="Light" icon={<LIco.bulb />} on={true} compact />
+              <DimmerWidget name="Dimmer" level={40} compact />
+              <CurtainWidget name="Curtain" position={50} compact />
+              <ThermostatArc name="Heat" ambient={21} setpoint={22} compact />
+            </AdaptiveGrid>
+          </PageShell>
+        </ThemedArtboard>
+        <ThemedArtboard theme="slate" label="Six · 6">
+          <PageShell title="Room" dots={3} active={0}>
+            <AdaptiveGrid>
+              <OnOffWidget name="Light" icon={<LIco.bulb />} on={true} compact />
+              <DimmerWidget name="Dimmer" level={60} compact />
+              <ShutterWidget name="Shutter" position={40} compact />
+              <CurtainWidget name="Curtain" position={55} compact />
+              <ThermostatArc name="Heat" ambient={21} setpoint={22} compact />
+              <ClimWidget name="AC" ambient={25} setpoint={24} mode="cool" compact />
+            </AdaptiveGrid>
+          </PageShell>
+        </ThemedArtboard>
+      </DCSection>
+
+      <DCSection id="blocks" title="控件积木"
+        subtitle="拼装单元（本地状态可点）">
+        <DCArtboard id="w-onoff" label="ON / OFF" width={280} height={200} style={{ background: "#0f1214" }}>
+          <ThemeScope theme="slate"><Cell w={280} h={200}><OnOffWidget name="Relay" icon={<LIco.bulb />} on={true} /></Cell></ThemeScope>
+        </DCArtboard>
+        <DCArtboard id="w-dimmer" label="Dimmer" width={280} height={200} style={{ background: "#0f1214" }}>
+          <ThemeScope theme="ocean"><Cell w={280} h={200}><DimmerWidget name="Dimmer" level={70} /></Cell></ThemeScope>
+        </DCArtboard>
+        <DCArtboard id="w-clim" label="HVAC" width={340} height={380} style={{ background: "#0f1214" }}>
+          <ThemeScope theme="dusk"><Cell w={340} h={380}><ClimWidget name="AC" ambient={25} setpoint={22} mode="cool" /></Cell></ThemeScope>
+        </DCArtboard>
+        <DCArtboard id="w-thermo" label="Thermostat" width={340} height={380} style={{ background: "#0f1214" }}>
+          <ThemeScope theme="forest"><Cell w={340} h={380}><ThermostatArc name="Heating" ambient={20.5} setpoint={22} dia={190} /></Cell></ThemeScope>
+        </DCArtboard>
+        <DCArtboard id="w-keypad" label="PIN · Ink" width={480} height={480} style={{ background: "#000" }}>
+          <ThemeScope theme="ink"><AlarmKeypad onClose={() => {}} /></ThemeScope>
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

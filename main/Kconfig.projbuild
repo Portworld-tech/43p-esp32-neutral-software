@@ -1,0 +1,145 @@
+# Customer SDK application Kconfig (no vendor GPIO pin map 鈥?pins live in board_bsp.a).
+
+menu "Wi-Fi station"
+
+    config APP_WIFI_STA_DISABLE_PS
+        bool "Disable modem power-save (WIFI_PS_NONE) for a more stable STA link"
+        default y
+
+    config APP_WIFI_AUTO_CONNECT_ON_BOOT
+        bool "Auto-connect saved SSID from NVS after wifi_management_start"
+        default y
+
+endmenu
+
+menu "App features"
+
+    config APP_USE_SPIFFS_UI_ASSETS
+        bool "Load UI PNG assets from SPIFFS (smaller firmware .bin)"
+        default y
+
+    config APP_FEATURE_MQTT
+        bool "Enable MQTT cloud client"
+        default y
+
+    config APP_FEATURE_BLE
+        bool "Enable BLE"
+        default y
+
+    config APP_FEATURE_MESH
+        bool "Enable BLE Mesh"
+        default y
+        depends on APP_FEATURE_BLE
+
+endmenu
+
+menu "Secondary-dev peripherals (open APIs)"
+
+    config APP_ENABLE_RS485
+        bool "Build RS485 / Modbus RTU open APIs (app_rs485 / app_modbus_rtu)"
+        default y
+        help
+            Ports half-duplex RS485 helpers from the hardware testbench into the
+            product open layer. Default UART0 GPIO43/44 + expander GPIO_OUT as DE.
+            If the console still uses UART0, switch console to USB Serial/JTAG
+            before calling app_rs485_init(), or pass a custom app_rs485_config_t.
+
+    config APP_RS485_AUTO_INIT
+        bool "Call app_rs485_init(NULL) during app_main"
+        depends on APP_ENABLE_RS485
+        default n
+        help
+            Off by default because product sdkconfig often keeps UART0 as console.
+            Enable after freeing UART0 (USB-JTAG console) or after changing pins.
+
+endmenu
+
+menu "Ambient screen (idle dim + clock)"
+
+    config UI_AMBIENT_ENABLE
+        bool "Enable ambient screen after idle timeout"
+        default y
+
+    config UI_AMBIENT_TIMEOUT_SEC
+        int "Idle timeout before ambient (seconds)"
+        depends on UI_AMBIENT_ENABLE
+        range 20 7200
+        default 120
+
+    config UI_AMBIENT_BACKLIGHT_PCT
+        int "Backlight percent in ambient"
+        depends on UI_AMBIENT_ENABLE
+        range 10 100
+        default 50
+
+endmenu
+
+menu "LVGL / FreeRTOS runtime tuning"
+
+    config APP_LVGL_HW_GPTIMER_TICK
+        bool "LV tick from GPTimer 1ms ISR (not FreeRTOS tick / esp_timer)"
+        default y
+
+    config APP_LVGL_TASK_PRIORITY
+        int "taskLVGL priority (WiFi/BT enabled)"
+        default 7
+        range 2 15
+
+    config APP_LVGL_TASK_PRIORITY_STANDALONE
+        int "taskLVGL priority (no BLE/Mesh)"
+        default 9
+        range 2 15
+
+    config APP_GUI_TASK_PRIO_BELOW_LVGL
+        int "gui_task priority = taskLVGL minus this"
+        default 1
+        range 1 4
+
+    config APP_UI_BG_TASK_PRIORITY
+        int "ui_bg background I/O task priority"
+        default 3
+        range 1 6
+
+    config APP_LVGL_TASK_CORE
+        int "Pin taskLVGL to CPU core"
+        default 1
+        range 0 1
+
+    config APP_LVGL_TASK_MAX_SLEEP_MS
+        int "taskLVGL lv_timer_handler max sleep (ms)"
+        default 16
+        range 10 1000
+
+endmenu
+
+menu "AHT20 indoor sensor (TP_SCL / TP_SDA bus)"
+
+    config AHT20_ENABLE
+        bool "Use AHT20 for Screen3/5 indoor temperature"
+        default y
+
+    config AHT20_I2C_ADDR
+        hex "AHT20 7-bit I2C address"
+        depends on AHT20_ENABLE
+        default 0x38
+
+    config AHT20_I2C_HZ
+        int "AHT20 I2C clock (Hz)"
+        depends on AHT20_ENABLE
+        default 400000
+        range 100000 400000
+
+endmenu
+
+menu "Runtime stability"
+
+    config APP_HEALTH_MONITOR
+        bool "Periodic heap health monitor (long-run diagnostics)"
+        default y
+
+    config APP_HEALTH_MONITOR_RESET_ON_OOM
+        bool "Restart after sustained low heap (5 consecutive checks)"
+        depends on APP_HEALTH_MONITOR
+        default n
+
+endmenu

@@ -1,0 +1,349 @@
+/* OEM Hub Kit — original slate/teal system (480×480). Not derived from third-party panels. */
+:root {
+  --bg-deep: #0f1214;
+  --bg-base: #161a1e;
+  --bg-card: #1c2228;
+  --bg-card-2: #252c34;
+  --bg-elev: #2e3640;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-2: rgba(255, 255, 255, 0.14);
+
+  --t1: #f3f5f7;
+  --t2: #b8c0c8;
+  --t3: #7d8792;
+  --t4: #525c66;
+
+  --accent: #2dd4bf;
+  --accent-2: #0f766e;
+  --on: #34d399;
+  --warm: #eab308;
+  --heat: #f59e0b;
+  --cool: #22d3ee;
+  --violet: #818cf8;
+  --alert: #f43f5e;
+  --sky: #38bdf8;
+
+  --ink-on-accent: #042f2e;
+
+  --font: "DM Sans", "Segoe UI", system-ui, sans-serif;
+  --font-d: "DM Sans", system-ui, sans-serif;
+  --font-clock: "DM Sans", system-ui, sans-serif;
+  --font-m: "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: #1a1d21; font-family: var(--font); color: var(--t1); }
+
+.lv {
+  width: 480px;
+  height: 480px;
+  background: var(--lv-grad, linear-gradient(180deg, #1a2026 0%, #0f1214 100%));
+  color: var(--t1);
+  font-family: var(--font);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+.lv.lv-solid { background: var(--bg-deep, #0b0d0f); }
+.lv.lv-panel { background: var(--bg-deep); }
+
+.bezel {
+  width: 520px;
+  height: 520px;
+  border-radius: 20px;
+  background: var(--bezel-bg, #22262c);
+  padding: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+}
+.bezel .lv,
+.bezel .theme-scope { border-radius: 10px; }
+
+/* demo chassis: screen + external chrome (tabs outside 480) */
+.hub-chassis {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  padding: 16px;
+  background: var(--panel-chrome, #1a1d21);
+  border-radius: 16px;
+}
+.hub-chassis-side {
+  width: 128px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 560px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+.hub-chassis-side .side-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #8a93a0;
+  margin-bottom: 4px;
+}
+.hub-chassis-main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+.hub-tabbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  max-width: 520px;
+}
+.hub-tabbar button {
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: #c5cdd8;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.hub-tabbar button.on {
+  background: color-mix(in srgb, var(--accent, #2dd4bf) 28%, transparent);
+  border-color: color-mix(in srgb, var(--accent, #2dd4bf) 50%, transparent);
+  color: #fff;
+}
+.theme-pick {
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  color: #c5cdd8;
+  border-radius: 8px;
+  padding: 7px 9px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.theme-pick.on {
+  outline: 2px solid var(--accent, #2dd4bf);
+  outline-offset: 0;
+  background: rgba(255,255,255,0.08);
+}
+.theme-pick small {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: #7d8792;
+  margin-top: 2px;
+}
+
+.lv-head {
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  border-bottom: 1px solid var(--line);
+}
+.lv-head .clock {
+  font-family: var(--font-clock);
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.lv-head .room { font-size: 14px; color: var(--t1); font-weight: 700; letter-spacing: 0.02em; }
+.lv-head .wx { display: flex; align-items: center; gap: 6px; color: var(--t3); font-size: 13px; font-weight: 600; }
+
+.lv-body {
+  flex: 1;
+  padding: 10px 12px 6px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.lv-dots {
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.lv-dot { width: 8px; height: 3px; border-radius: 1px; background: rgba(255, 255, 255, 0.18); }
+.lv-dot.on { width: 20px; background: var(--accent); }
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--t3);
+  font-weight: 700;
+}
+
+.w {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s, transform 0.12s;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+}
+/* Dense card for 4–6 cell grids — keeps bottom row fully visible */
+.w.w-compact {
+  padding: 8px 10px;
+  gap: 4px;
+}
+.w.w-compact .w-title { font-size: 13px; }
+.w.w-compact .w-sub { font-size: 11px; }
+.w:active { transform: scale(0.985); }
+.w::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: transparent;
+  transition: background 0.18s, box-shadow 0.18s;
+}
+.w.active::before,
+.w[data-on="1"]::before {
+  background: var(--accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.w[data-on="1"] {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--bg-card)), var(--bg-card));
+}
+
+.badge {
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.pwr {
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s, transform 0.12s, box-shadow 0.15s;
+}
+.pwr:active { transform: scale(0.92); }
+
+.track-fill { transition: width 0.08s linear; }
+.track-knob { transition: left 0.08s linear, box-shadow 0.15s; }
+.ctrl-btn { transition: background 0.15s, color 0.15s, transform 0.1s; }
+.ctrl-btn:active { transform: scale(0.96); }
+
+.basic-cta {
+  margin-top: 10px;
+  height: 44px;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--bg-card);
+  color: var(--t1);
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+}
+.basic-cta:active { background: var(--bg-card-2); }
+.basic-row { transition: border-color 0.15s, background 0.15s; }
+
+.sf-back {
+  background: var(--bg-card-2);
+  border: 1px solid var(--line);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  color: var(--t2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.sf-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 52px;
+  padding: 0 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.sf-row:active { background: var(--bg-card-2); }
+
+.sf-switch {
+  width: 44px;
+  height: 26px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  position: relative;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.sf-switch.on { background: var(--accent); }
+.sf-switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  background: #fff;
+  transition: transform 0.15s;
+}
+.sf-switch.on::after { transform: translateX(18px); }
+
+.no-sb::-webkit-scrollbar,
+.scroll-pane::-webkit-scrollbar {
+  display: none;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent;
+}
+.no-sb,
+.scroll-pane {
+  scrollbar-width: none; /* Firefox — no gutter */
+  -ms-overflow-style: none; /* legacy Edge */
+}
+/* Flex-safe scroll: min-height:0 is required or overflow never engages */
+.scroll-pane {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+.scroll-pane--grid {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  grid-auto-rows: min-content;
+}
