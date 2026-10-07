@@ -1,9 +1,9 @@
-# 43P ESP32 Neutral Software
+﻿# 43P ESP32 Neutral Software
 
 Organization: **Portworld-tech**  
 Contact: xjunsoftware@ycxytech.com
 
-ESP32-S3 **customer / OEM layered SDK** for a 480×480 Hub UI panel: closed board/cloud/BT libraries + open themes and `hub_ui`. Board pin maps are **not** published as source (baked into `board_bsp.a`).
+ESP32-S3 **customer / OEM layered SDK** for a 480脳480 Hub UI panel: closed board/cloud/BT libraries + open themes and `hub_ui`. Board pin maps are **not** published as source (baked into `board_bsp.a`).
 
 ## Firmware (this tree)
 
@@ -11,7 +11,7 @@ ESP32-S3 **customer / OEM layered SDK** for a 480×480 Hub UI panel: closed boar
 |------|------|
 | `components/board_bsp` | Closed: display / touch / backlight (`.a`) + public headers |
 | `components/hub_core` | Closed: `hub_model` |
-| `components/cloud_wifi` | Closed: Wi‑Fi + Bemfa MQTT |
+| `components/cloud_wifi` | Closed: Wi鈥慒i + Bemfa MQTT |
 | `components/bt_ctrl` | Closed: BLE / Mesh control |
 | `main/hub_ui` | Open: UI chrome |
 | `ui/themes/*` | Open: ten Hub themes |
@@ -20,7 +20,7 @@ ESP32-S3 **customer / OEM layered SDK** for a 480×480 Hub UI panel: closed boar
 
 ### Quick start
 
-1. Edit `main/app_ui_theme_select.h` → pick a Hub theme (`SLATE` / `SAND` / …, not `DEFAULT`).
+1. Edit `main/app_ui_theme_select.h` 鈫?pick a Hub theme (`SLATE` / `SAND` / 鈥? not `DEFAULT`).
 2. Customize `ui/themes/<id>/` or replace `spiffs_image/icons/nt/*.png`.
 3. Call public APIs: `hub_model.h`, `wifi_management.h`, `wifi_bemfa_client.h`, `bt_management.h`, `board_*`.
 
@@ -36,9 +36,9 @@ More detail: [docs/THEME_SECONDARY_DEV.md](docs/THEME_SECONDARY_DEV.md).
 
 ---
 
-## UI preview (browser) — `lvgl-front`
+## UI preview (browser) 鈥?`lvgl-front`
 
-Interactive **OEM Hub UI Kit** (480×480): ten theme hubs, rooms, scenes, Wi‑Fi sheet, schedules. Same visual language as the on-device themes; use it for customer theme selection before flashing firmware.
+Interactive **OEM Hub UI Kit** (480脳480): ten theme hubs, rooms, scenes, Wi鈥慒i sheet, schedules. Same visual language as the on-device themes; use it for customer theme selection before flashing firmware.
 
 ### Run locally
 
@@ -73,7 +73,7 @@ After Pages is enabled on this repo (source: `/lvgl-front` or `docs` workflow), 
 ---
 
 
-### AHT20 temperature && humidity
+### AHT20 temperature and humidity
 
 Enable `CONFIG_AHT20_ENABLE`. Open source driver: `main/board/aht20.c`.
 
@@ -81,7 +81,7 @@ Enable `CONFIG_AHT20_ENABLE`. Open source driver: `main/board/aht20.c`.
 #include "aht20.h"
 float t = 0, rh = 0;
 aht20_init(board_i2c_get_handle());
-aht20_read(&t, &rh);   /* °C and %RH */
+aht20_read(&t, &rh);   /* 掳C and %RH */
 ```
 
 Background task writes `hub_model()->indoor_c` / `hub_model()->rh`; Hub themes refresh automatically.
