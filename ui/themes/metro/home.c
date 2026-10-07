@@ -53,15 +53,17 @@ void build_home(lv_obj_t *parent)
              hub_model_room_active(0) ? hub_tr("运行", "Active") : hub_tr("待机", "Idle"));
     snprintf(sub1, sizeof(sub1), "%s",
              hub_model_room_active(1) ? hub_tr("运行", "Active") : hub_tr("待机", "Idle"));
+    char sub_clim[24];
     snprintf(sub_e, sizeof(sub_e), "%.1f kW", (double)m->power_kw);
     snprintf(sub_b, sizeof(sub_b), "%d/%d", hub_model_ok_count(), HUB_PROTO_COUNT);
+    snprintf(sub_clim, sizeof(sub_clim), "%.0f°/%d%%", (double)m->indoor_c, m->rh);
     const char *labels[] = {
         hub_model_room_name(0), hub_model_room_name(1), hub_model_room_name(2),
         hub_tr("情景", "Scenes"), hub_tr("总线", "Gateway"), hub_tr("能耗", "Energy"),
-        hub_tr("安防", "Security"),
+        hub_tr("气候", "Climate"),
     };
     const char *subs[] = {sub0, sub1, "4 pts", hub_model_scene_label(m->active_scene), sub_b, sub_e,
-                          m->armed ? hub_tr("布防", "Armed") : hub_tr("撤防", "Disarmed")};
+                          sub_clim};
     lv_color_t colors[] = {
         LV_COLOR_MAKE(0x00, 0xbc, 0xf2), LV_COLOR_MAKE(0x87, 0x64, 0xb8), LV_COLOR_MAKE(0x10, 0x7c, 0x10),
         LV_COLOR_MAKE(0xff, 0x8c, 0x00), LV_COLOR_MAKE(0xe7, 0x48, 0x56), LV_COLOR_MAKE(0x00, 0x78, 0xd4),
@@ -73,7 +75,7 @@ void build_home(lv_obj_t *parent)
     int rooms[] = {0, 1, 2, -1, -1, -1, -1};
     hub_route_t routes[] = {
         HUB_ROUTE_ROOM, HUB_ROUTE_ROOM, HUB_ROUTE_ROOM, HUB_ROUTE_SCENES,
-        HUB_ROUTE_GATEWAY, HUB_ROUTE_ENERGY, HUB_ROUTE_SECURITY,
+        HUB_ROUTE_GATEWAY, HUB_ROUTE_ENERGY, HUB_ROUTE_HVAC,
     };
     for (int i = 0; i < 7; i++) {
         lv_obj_t *b = lv_btn_create(grid);

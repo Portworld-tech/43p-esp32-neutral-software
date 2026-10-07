@@ -5,6 +5,7 @@
 #include "hub_font.h"
 #include "hub_model.h"
 #include "hub_icons.h"
+#include "hub_i18n.h"
 #include "app_ui.h"
 
 #include <stdio.h>
@@ -71,7 +72,11 @@ void build_home(lv_obj_t *parent)
     snprintf(mv1, sizeof(mv1), "%.1f°", (double)m->indoor_c);
     snprintf(mv2, sizeof(mv2), "%d%%", m->rh);
     const char *mvs[] = { mv0, mv1, mv2 };
-    const char *mls[] = { "Power", "Indoor", "RH" };
+    const char *mls[] = {
+        hub_tr("功率", "Power"),
+        hub_tr("室内", "Indoor"),
+        hub_tr("湿度", "RH"),
+    };
     hub_route_t mrs[] = { HUB_ROUTE_ENERGY, HUB_ROUTE_HVAC, HUB_ROUTE_HVAC };
     for (int i = 0; i < 3; i++) {
         lv_obj_t *c = lv_btn_create(metrics);

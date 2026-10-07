@@ -53,6 +53,7 @@ set(MAIN_SRCS
         app/app_wifi_util.c
         app/app_rs485.c
         app/app_modbus_rtu.c
+        board/aht20.c
         gui/ui_bg_task.c
         "fonts/lv_font_source_han_14_cjk3500.c"
         "fonts/lv_font_source_han_ambient_time_150.c"

@@ -15,6 +15,8 @@ bool ui_bg_task_post_save_temps(int screen3_temp, int screen5_temp);
 #if defined(CONFIG_AHT20_ENABLE) && CONFIG_AHT20_ENABLE
 /** Last polled indoor temperature (°C rounded), or 999999 if unknown. Thread-safe read. */
 int ui_bg_task_get_indoor_temp_cached(void);
+/** Last polled relative humidity (%RH rounded), or 999999 if unknown. Thread-safe read. */
+int ui_bg_task_get_indoor_rh_cached(void);
 #endif
 
 #ifdef __cplusplus

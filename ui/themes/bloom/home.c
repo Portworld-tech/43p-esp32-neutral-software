@@ -73,6 +73,10 @@ void build_home(lv_obj_t *parent)
     lbl(hl, "Bloom", p->accent, hub_font());
     lv_obj_t *clk = hub_clock_label(hl, p->t1, hub_font_clock());
     lv_obj_set_style_text_letter_space(clk, -1, 0);
+    char clim[40];
+    snprintf(clim, sizeof(clim), hub_tr("室内 %.1f° · %d%%", "Indoor %.1f° · %d%%"),
+             (double)m->indoor_c, m->rh);
+    lbl(hl, clim, p->t3, hub_font());
 
     lv_obj_t *hvac = lv_btn_create(head);
     lv_obj_remove_style_all(hvac);

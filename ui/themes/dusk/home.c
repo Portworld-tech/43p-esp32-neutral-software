@@ -38,6 +38,10 @@ void build_home(lv_obj_t *parent)
     lv_obj_set_flex_flow(hl, LV_FLEX_FLOW_COLUMN);
     lbl(hl, "DUSK", p->violet, hub_font());
     hub_clock_label(hl, p->t1, hub_font_clock_lg());
+    char clim[40];
+    snprintf(clim, sizeof(clim), hub_tr("室内 %.1f° · RH %d%%", "Indoor %.1f° · RH %d%%"),
+             (double)m->indoor_c, m->rh);
+    lbl(hl, clim, p->t3, hub_font());
     lv_obj_t *sec = lv_btn_create(head);
     lv_obj_remove_style_all(sec);
     hub_apply_card(sec, m->armed);

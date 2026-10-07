@@ -1,21 +1,9 @@
-/* Minimal stubs for symbols referenced by closed cloud_wifi.a / bt_ctrl.a. */
-#include <stdbool.h>
-#include <stdint.h>
+#include "ui_runtime.h"
+
+#include "hub_model.h"
+#include "hub_ui.h"
+
 #include <string.h>
-
-struct _lv_obj_t;
-typedef struct _lv_obj_t lv_obj_t;
-
-typedef struct {
-    uint8_t i1;
-    uint8_t i2;
-    uint8_t i3;
-    int16_t t3;
-    int16_t t5;
-    uint8_t e3;
-    uint8_t e5;
-    uint8_t m;
-} ui_runtime_cloud_snapshot_t;
 
 void ui_runtime_apply(void) {}
 void ui_runtime_disable_btn_grow_everywhere(void) {}
@@ -43,6 +31,34 @@ bool ui_runtime_allow_mqtt_temp_item(uint8_t item_id)
 }
 void ui_runtime_screen10_pick_and_home(uint8_t pick) { (void)pick; }
 void ui_runtime_screen_change_by_obj(lv_obj_t *scr) { (void)scr; }
-void ui_runtime_indoor_apply_temp(int temp_c) { (void)temp_c; }
 
-void bt_switch_control_linker_keep(void) {}
+void ui_runtime_indoor_apply_climate(float temp_c, int rh_pct)
+{
+    hub_model_t *m = hub_model();
+    if (!m) {
+        return;
+    }
+    int rh = rh_pct;
+    if (rh < 0) {
+        rh = 0;
+    }
+    if (rh > 100) {
+        rh = 100;
+    }
+
+    const int t10 = (int)(temp_c * 10.0f + (temp_c >= 0.0f ? 0.5f : -0.5f));
+    const int old_t10 = (int)(m->indoor_c * 10.0f + (m->indoor_c >= 0.0f ? 0.5f : -0.5f));
+    const bool changed = (t10 != old_t10) || (m->rh != rh);
+    m->indoor_c = temp_c;
+    m->rh = rh;
+    if (changed) {
+        hub_ui_refresh();
+    }
+}
+
+void ui_runtime_indoor_apply_temp(int temp_c)
+{
+    hub_model_t *m = hub_model();
+    const int rh = m ? m->rh : 0;
+    ui_runtime_indoor_apply_climate((float)temp_c, rh);
+}

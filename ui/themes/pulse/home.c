@@ -54,14 +54,14 @@ void build_home(lv_obj_t *parent)
     lv_obj_add_event_cb(pwr, go_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)HUB_ROUTE_ENERGY);
     lbl(pwr, "PWR_DRAW", p->accent, hub_font());
     lv_obj_align(lv_obj_get_child(pwr, 0), LV_ALIGN_TOP_LEFT, 8, 8);
-    char pb[16];
-    snprintf(pb, sizeof(pb), "%.2f", (double)m->power_kw);
+    char pb[24];
+    snprintf(pb, sizeof(pb), "%.2f  %.0f°/%d%%", (double)m->power_kw, (double)m->indoor_c, m->rh);
     lv_obj_t *pv = lv_label_create(pwr);
     lv_label_set_text(pv, pb);
     hub_style_label(pv, p->accent, hub_font_clock());
     lv_obj_align(pv, LV_ALIGN_LEFT_MID, 8, 4);
-    lbl(pwr, "kW", p->t3, hub_font());
-    lv_obj_align(lv_obj_get_child(pwr, 2), LV_ALIGN_LEFT_MID, 90, 8);
+    lbl(pwr, "kW · T/RH", p->t3, hub_font());
+    lv_obj_align(lv_obj_get_child(pwr, 2), LV_ALIGN_LEFT_MID, 8, 28);
     lv_obj_t *bar_bg = lv_obj_create(pwr);
     lv_obj_remove_style_all(bar_bg);
     lv_obj_set_size(bar_bg, LV_PCT(90), 4);

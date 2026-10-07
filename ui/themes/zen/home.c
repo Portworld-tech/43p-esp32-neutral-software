@@ -101,14 +101,14 @@ void build_home(lv_obj_t *parent)
     char sub[96];
     if (d->ac_on) {
         snprintf(sub, sizeof(sub),
-                 hub_tr("%s · %d° · %.1fkW · 点击进入", "%s · %d° · %.1fkW · tap to open"),
+                 hub_tr("%s · 设定%d° · 室内%.1f°/%d%%", "%s · Set %d° · Indoor %.1f°/%d%%"),
                  on ? hub_tr("运行中", "Active") : hub_tr("静音", "Quiet"),
-                 d->ac_sp, (double)m->power_kw);
+                 d->ac_sp, (double)m->indoor_c, m->rh);
     } else {
         snprintf(sub, sizeof(sub),
-                 hub_tr("%s · 空调关 · %.1fkW · 点击进入", "%s · AC off · %.1fkW · tap to open"),
+                 hub_tr("%s · 室内%.1f°/%d%% · %.1fkW", "%s · Indoor %.1f°/%d%% · %.1fkW"),
                  on ? hub_tr("运行中", "Active") : hub_tr("静音", "Quiet"),
-                 (double)m->power_kw);
+                 (double)m->indoor_c, m->rh, (double)m->power_kw);
     }
     lv_obj_t *sl = lv_label_create(focus);
     lv_label_set_text(sl, sub);

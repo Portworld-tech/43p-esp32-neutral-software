@@ -473,7 +473,8 @@ void hub_build_hvac(lv_obj_t *parent)
     lv_obj_align(sv, LV_ALIGN_LEFT_MID, 12, 10);
 
     char amb[24];
-    snprintf(amb, sizeof(amb), hub_tr("室内 %.1f°", "Indoor %.1f°"), (double)m->indoor_c);
+    snprintf(amb, sizeof(amb), hub_tr("室内 %.1f° · RH %d%%", "Indoor %.1f° · RH %d%%"),
+             (double)m->indoor_c, m->rh);
     lbl(ac, amb, p->t3, hub_font());
     lv_obj_align(lv_obj_get_child(ac, -1), LV_ALIGN_BOTTOM_LEFT, 12, -14);
 

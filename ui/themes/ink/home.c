@@ -34,6 +34,9 @@ void build_home(lv_obj_t *parent)
     lv_obj_set_flex_flow(rail, LV_FLEX_FLOW_COLUMN);
     lbl(rail, "INK", p->accent, hub_font());
     hub_clock_label(rail, p->t1, hub_font_clock());
+    char clim[28];
+    snprintf(clim, sizeof(clim), "%.1f° / %d%%", (double)m->indoor_c, m->rh);
+    lbl(rail, clim, p->t2, hub_font());
     for (int i = 0; i < 3; i++) {
         lv_obj_t *b = lv_btn_create(rail);
         lv_obj_remove_style_all(b);

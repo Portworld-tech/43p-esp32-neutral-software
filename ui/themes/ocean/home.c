@@ -57,7 +57,7 @@ void build_home(lv_obj_t *parent)
     lv_obj_add_event_cb(hero, go_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)HUB_ROUTE_ENERGY);
     char a[32], b[32];
     snprintf(a, sizeof(a), "%.2f kW", (double)m->power_kw);
-    snprintf(b, sizeof(b), "%d / 48", m->online_pts);
+    snprintf(b, sizeof(b), "%.1f° / %d%%", (double)m->indoor_c, m->rh);
     lv_obj_t *l1 = lv_label_create(hero);
     lv_label_set_text(l1, hub_tr("整屋功率", "Whole-home power"));
     hub_style_label(l1, p->t3, hub_font());
@@ -67,7 +67,7 @@ void build_home(lv_obj_t *parent)
     hub_style_label(v1, p->accent, hub_font_clock());
     lv_obj_align(v1, LV_ALIGN_BOTTOM_LEFT, 0, -4);
     lv_obj_t *l2 = lv_label_create(hero);
-    lv_label_set_text(l2, hub_tr("在线设备", "Online devices"));
+    lv_label_set_text(l2, hub_tr("室内温湿度", "Indoor T/RH"));
     hub_style_label(l2, p->t3, hub_font());
     lv_obj_align(l2, LV_ALIGN_TOP_RIGHT, 0, 4);
     lv_obj_t *v2 = lv_label_create(hero);

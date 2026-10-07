@@ -48,7 +48,9 @@ static uint32_t s_drop_cnt;
 #if defined(CONFIG_AHT20_ENABLE) && CONFIG_AHT20_ENABLE
 static bool s_aht20_ready;
 static int s_indoor_cached = 999999;
-static volatile int s_indoor_lvgl_pending = 999999;
+static int s_rh_cached = 999999;
+static volatile float s_indoor_lvgl_pending_c;
+static volatile int s_rh_lvgl_pending = 999999;
 static TickType_t s_aht20_next_action;
 static uint8_t s_aht20_fail_streak;
 static bool s_aht20_absent_logged;
@@ -56,9 +58,8 @@ static bool s_aht20_absent_logged;
 static void ui_bg_indoor_lvgl_cb(void *user_data)
 {
     (void)user_data;
-    const int ti = s_indoor_lvgl_pending;
-    extern void ui_runtime_indoor_apply_temp(int temp_c);
-    ui_runtime_indoor_apply_temp(ti);
+    extern void ui_runtime_indoor_apply_climate(float temp_c, int rh_pct);
+    ui_runtime_indoor_apply_climate(s_indoor_lvgl_pending_c, s_rh_lvgl_pending);
 }
 
 static bool ui_bg_i2c_lock(void)
@@ -156,7 +157,8 @@ static void ui_bg_aht20_poll(void)
         return;
     }
     float c = 0.0f;
-    esp_err_t err = aht20_read_temperature_c(&c);
+    float rh = 0.0f;
+    esp_err_t err = aht20_read(&c, &rh);
     ui_bg_i2c_unlock();
     ui_bg_aht20_schedule(UI_BG_TEMP_POLL_MS);
     if (err != ESP_OK) {
@@ -164,11 +166,14 @@ static void ui_bg_aht20_poll(void)
     }
 
     const int ti = (int)(c >= 0.0f ? (c + 0.5f) : (c - 0.5f));
-    if (ti == s_indoor_cached) {
+    const int rhi = (int)(rh + 0.5f);
+    if (ti == s_indoor_cached && rhi == s_rh_cached) {
         return;
     }
     s_indoor_cached = ti;
-    s_indoor_lvgl_pending = ti;
+    s_rh_cached = rhi;
+    s_indoor_lvgl_pending_c = c;
+    s_rh_lvgl_pending = rhi;
     (void)gui_task_notify_lvgl(ui_bg_indoor_lvgl_cb, NULL);
 }
 #endif /* CONFIG_AHT20_ENABLE */
@@ -283,5 +288,10 @@ bool ui_bg_task_post_save_temps(int screen3_temp, int screen5_temp)
 int ui_bg_task_get_indoor_temp_cached(void)
 {
     return s_indoor_cached;
+}
+
+int ui_bg_task_get_indoor_rh_cached(void)
+{
+    return s_rh_cached;
 }
 #endif

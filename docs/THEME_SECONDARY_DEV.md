@@ -144,7 +144,7 @@ idf.py build
 | `APP_FEATURE_BLE` | 启用 BLE |
 | `APP_FEATURE_MESH` | 启用 BLE Mesh（依赖 BLE） |
 | `UI_AMBIENT_ENABLE` | 环境光/待机相关 |
-| `AHT20_ENABLE` | 板载温湿度 |
+| `AHT20_ENABLE` | 板载 AHT20 温湿度（后台轮询写入 `hub_model`） |
 
 LVGL 侧默认已在 `sdkconfig.defaults` 打开 PNG + POSIX FS（见第 5 节），勿随意关掉。
 
@@ -369,7 +369,7 @@ void wifi_bemfa_client_schedule_sync(void);  /* 合并上报全量快照 */
 
 ---
 
-## 11. 板级公开 API（背光 / 蜂鸣 / I2C）
+## 11. 板级公开 API（背光 / 蜂鸣 / I2C / AHT20）
 
 `withthewind_board_lvgl_init.h`：
 
@@ -381,6 +381,18 @@ esp_err_t board_backlight_off(void);
 esp_err_t board_beep_set(int on);
 i2c_master_bus_handle_t board_i2c_get_handle(void);
 ```
+
+`aht20.h`（需 `CONFIG_AHT20_ENABLE=y`，与触摸共用 I2C）：
+
+```c
+aht20_init(board_i2c_get_handle());
+float t_c = 0, rh = 0;
+aht20_read(&t_c, &rh);                 /* 一次测量同时得到温度与湿度 */
+aht20_read_temperature_c(&t_c);        /* 仅温度 */
+aht20_read_humidity_rh(&rh);           /* 仅湿度 %RH */
+```
+
+固件后台 `ui_bg_task` 会周期性读取并写入 `hub_model()->indoor_c` / `hub_model()->rh`，各 Hub 主题首页与能耗页显示同源数据。无传感器时界面保留演示默认值。
 
 设置页亮度滑条已调用 `board_backlight_*`。自研传感器可挂在 `board_i2c_get_handle()` 上（注意地址冲突与总线占用）。
 
