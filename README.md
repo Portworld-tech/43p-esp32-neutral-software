@@ -72,6 +72,19 @@ After Pages is enabled on this repo (source: `/lvgl-front` or `docs` workflow), 
 
 ---
 
+
+### AHT20 temperature && humidity
+
+Enable `CONFIG_AHT20_ENABLE`. Open source driver: `main/board/aht20.c`.
+
+```c
+#include "aht20.h"
+float t = 0, rh = 0;
+aht20_init(board_i2c_get_handle());
+aht20_read(&t, &rh);   /* °C and %RH */
+```
+
+Background task writes `hub_model()->indoor_c` / `hub_model()->rh`; Hub themes refresh automatically.
 ## Related
 
 - Org showcase (software layer share): [Portworld-tech/esp32-projects](https://github.com/Portworld-tech/esp32-projects)
