@@ -2,17 +2,17 @@
 
 本文面向拿到 `customer_sdk/` 的客户工程师：从工程是什么、能改什么、怎么编译烧录，到主题/图标、Hub 业务模型、**AHT20 温湿度示值调整**、**RS485 / Modbus 控设备**，以及 Wi‑Fi / 巴法 MQTT / 蓝牙扩展。
 
-> 本公开仓库只放总览与 FAQ。分章 `docs/api_guide/` 随合同 SDK 交付，不在 GitHub 公开树。
-
 请把本目录当作**独立 ESP-IDF 工程**使用，不要与厂商私有产品仓根目录混开。
+
+> 本公开仓库提供中/英二次开发总览。分章 `docs/api_guide/` 随合同 SDK 交付，不在本 GitHub 树。
 
 | 文档 | 用途 |
 |------|------|
-| **本文** | 二次开发总览（建议从这里开始） |
+| **本文（中文）** | 二次开发总览（建议从这里开始） |
+| [THEME_SECONDARY_DEV_EN.md](./THEME_SECONDARY_DEV_EN.md) | **English** edition（same structure） |
 | [api_guide/zh/00_secondary_dev.md](./api_guide/zh/00_secondary_dev.md) | 心智模型 + 三种开发方式 + 学习路径 |
 | [api_guide/zh/guides/G01_modbus_rs485_lvgl.md](./api_guide/zh/guides/G01_modbus_rs485_lvgl.md) | **屏控 RS485/Modbus 实战**（最常跟） |
 | [api_guide/zh/guides/G00_directions.md](./api_guide/zh/guides/G00_directions.md) | 7 种产品融合方向选型 |
-| [CUSTOMER_FAQ_CN.md](./CUSTOMER_FAQ_CN.md) | 售前/硬件集成 FAQ（AHT20/蜂鸣等） |
 | [api_guide/zh/AI_DEV.md](./api_guide/zh/AI_DEV.md) | 结合 Cursor / ChatGPT 协作（含红线） |
 
 English API guide: [api_guide/en/README.md](./api_guide/en/README.md)
@@ -114,8 +114,8 @@ AHT20 ──ui_bg_task──► hub_model.indoor_c / rh ──► 主题首页�
 customer_sdk/
 ├── README.md / AGENTS.md
 ├── docs/
-│   ├── THEME_SECONDARY_DEV.md     # 本文
-│   ├── CUSTOMER_FAQ*.md           # FAQ
+│   ├── THEME_SECONDARY_DEV.md     # 本文（中文）
+│   ├── THEME_SECONDARY_DEV_EN.md  # English edition
 │   └── api_guide/zh|en/           # ★ 分章 API + 场景指南 + AI 协作
 ├── CMakeLists.txt / sdkconfig.defaults / partitions.csv
 ├── main/
@@ -388,8 +388,6 @@ aht20_read_raw(&t, &rh);   /* 未校准，调 OFFSET 时对照用 */
 | 改宏无效 | 是否重新编译烧录；主题是否误改另一套状态 |
 | 触摸异常 | AHT20 与 GT911 同总线，检查接线与地址 `0x38` |
 
-更细 FAQ：[CUSTOMER_FAQ.md §1.13](./CUSTOMER_FAQ.md)。
-
 ---
 
 ## 12. RS485 / Modbus 控制（重点）
@@ -554,7 +552,8 @@ PNG + POSIX FS + 已 flash storage + SPIFFS 内有 `icons/nt/*.png`。
 
 ```
 customer_sdk/
-  docs/THEME_SECONDARY_DEV.md
+  docs/THEME_SECONDARY_DEV.md        # 中文总览
+  docs/THEME_SECONDARY_DEV_EN.md     # English overview
   docs/api_guide/zh/                 # 分章 + G00–G06
   main/app_ui_theme_select.h
   main/app/app_api.h                 # 开放外设总入口

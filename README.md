@@ -32,8 +32,7 @@ idf.py -p COMx flash monitor
 
 ESP-IDF **5.5.x**, target **esp32s3**. Flash must include the **storage (SPIFFS)** partition so icons appear.
 
-More detail: [docs/THEME_SECONDARY_DEV.md](docs/THEME_SECONDARY_DEV.md).  
-Customer FAQ (CN/EN): [docs/CUSTOMER_FAQ_CN.md](docs/CUSTOMER_FAQ_CN.md) · [docs/CUSTOMER_FAQ_EN.md](docs/CUSTOMER_FAQ_EN.md).
+Secondary-dev overview: [docs/THEME_SECONDARY_DEV.md](docs/THEME_SECONDARY_DEV.md) (Chinese) · [docs/THEME_SECONDARY_DEV_EN.md](docs/THEME_SECONDARY_DEV_EN.md) (English).
 
 ---
 
