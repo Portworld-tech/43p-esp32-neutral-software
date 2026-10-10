@@ -88,6 +88,3 @@ aht20_read_raw(&t, &rh);   /* uncalibrated */
 ```
 
 Background task writes `hub_model()->indoor_c` / `hub_model()->rh`; Hub themes refresh automatically.
-## Related
-
-- Org showcase (software layer share): [Portworld-tech/esp32-projects](https://github.com/Portworld-tech/esp32-projects)

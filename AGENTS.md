@@ -1,10 +1,8 @@
-# Agent notes (Customer SDK)
+# Agent notes (public 43P SDK)
 
-When helping with this repository, **read and obey**:
+When helping with this repository:
 
-- [docs/api_guide/zh/AI_CONTEXT.md](docs/api_guide/zh/AI_CONTEXT.md) (constraints)
-- [docs/api_guide/zh/AI_DEV.md](docs/api_guide/zh/AI_DEV.md) (AI workflow for customers)
-
-Secondary-dev entry for humans: [docs/api_guide/zh/00_secondary_dev.md](docs/api_guide/zh/00_secondary_dev.md)
-
-Prefer implementing bus bridges from `main/app/examples/app_bus_bridge_example.c` and guides under `docs/api_guide/zh/guides/`.
+- Start from [docs/THEME_SECONDARY_DEV.md](docs/THEME_SECONDARY_DEV.md)
+- Customer FAQ: [docs/CUSTOMER_FAQ_CN.md](docs/CUSTOMER_FAQ_CN.md) / [docs/CUSTOMER_FAQ_EN.md](docs/CUSTOMER_FAQ_EN.md)
+- Only change the open layer (`ui/themes`, `hub_ui`, `main/app`, `main/board/aht20*`)
+- Do not reverse closed `.a` libraries or invent unpublished pin maps

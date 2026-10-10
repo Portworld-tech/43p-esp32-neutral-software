@@ -241,7 +241,7 @@ Arduino 仅建议用于极小 Demo，不适合本面板完整智能家居项目�
 
 - `app_rs485_init` 默认：`UART_DATA_8_BITS` + `UART_PARITY_DISABLE` + `UART_STOP_BITS_1`，波特率可配（常见 115200 / 9600）
 - 常规 **Modbus RTU**、自定义 8 位帧：走现有 `app_rs485_*` / `app_modbus_*` 即可
-- 详见 [api_guide/zh/10_gpio_rs485.md](./api_guide/zh/10_gpio_rs485.md)
+- 详见 `main/app/app_rs485.h` 与 [THEME_SECONDARY_DEV.md](./THEME_SECONDARY_DEV.md) 第 12 节
 
 **建议对外答复（中文）：**
 
@@ -282,7 +282,7 @@ Arduino 仅建议用于极小 Demo，不适合本面板完整智能家居项目�
 
 **工具 / 框架 / 库：** ESP-IDF、LVGL、`esp_lvgl_port`、板级 LCD/触摸组件；业务侧为中性 Hub SDK。客户包不含 SquareLine 的 default 工程；界面主要以 **SquareLine / GUI Guider** 等独立桌面 GUI 编辑器进行设计。
 
-细文档：[THEME_SECONDARY_DEV.md](./THEME_SECONDARY_DEV.md)、[api_guide/zh/15_hub.md](./api_guide/zh/15_hub.md)
+细文档：[THEME_SECONDARY_DEV.md](./THEME_SECONDARY_DEV.md)
 
 **建议对外答复（中文）：**
 
@@ -392,11 +392,6 @@ Arduino 仅建议用于极小 Demo，不适合本面板完整智能家居项目�
 | 文档 | 内容 |
 |------|------|
 | [THEME_SECONDARY_DEV.md](./THEME_SECONDARY_DEV.md) | 工程总览、主题、图标、Wi‑Fi/MQTT、AHT20、RS485 |
-| [CUSTOMER_API_GUIDE.md](./CUSTOMER_API_GUIDE.md) | API 分章手册入口 |
-| [api_guide/zh/10_gpio_rs485.md](./api_guide/zh/10_gpio_rs485.md) | RS485 / DE |
-| [api_guide/zh/08_backlight.md](./api_guide/zh/08_backlight.md) | 背光 |
-| [api_guide/zh/16_icons.md](./api_guide/zh/16_icons.md) | 图标 |
-| [api_guide/zh/15_hub.md](./api_guide/zh/15_hub.md) | Hub 模型与 UI |
 | GitHub 公开示例 | [Portworld-tech/43p-esp32-neutral-software](https://github.com/Portworld-tech/43p-esp32-neutral-software) |
 | 主题在线预览 | [GitHub Pages](https://portworld-tech.github.io/43p-esp32-neutral-software/) |
 

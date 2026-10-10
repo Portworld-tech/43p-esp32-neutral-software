@@ -239,7 +239,7 @@ Open-layer status:
 
 - `app_rs485_init` default: `UART_DATA_8_BITS` + `UART_PARITY_DISABLE` + `UART_STOP_BITS_1`; baud is configurable (often 115200 / 9600)  
 - Typical **Modbus RTU** / custom 8-bit frames: use `app_rs485_*` / `app_modbus_*`  
-- Details: [api_guide/zh/10_gpio_rs485.md](./api_guide/zh/10_gpio_rs485.md) (Chinese API guide)
+- Details: `main/app/app_rs485.h` and [THEME_SECONDARY_DEV.md](./THEME_SECONDARY_DEV.md) §12
 
 **Customer-facing reply:**
 
@@ -274,7 +274,7 @@ Open-layer status:
 
 **Tools / frameworks / libraries:** ESP-IDF, LVGL, `esp_lvgl_port`, board LCD/touch components; application stack is the neutral Hub SDK. The customer package does **not** include a SquareLine default project; UI is primarily designed with standalone desktop editors such as **SquareLine / GUI Guider**.
 
-Docs: [THEME_SECONDARY_DEV.md](./THEME_SECONDARY_DEV.md), [api_guide/zh/15_hub.md](./api_guide/zh/15_hub.md)
+Docs: [THEME_SECONDARY_DEV.md](./THEME_SECONDARY_DEV.md)
 
 **Customer-facing reply:**
 
@@ -376,9 +376,6 @@ Docs: [THEME_SECONDARY_DEV.md](./THEME_SECONDARY_DEV.md), [api_guide/zh/15_hub.m
 | Document | Content |
 |----------|---------|
 | [THEME_SECONDARY_DEV.md](./THEME_SECONDARY_DEV.md) | Overview, themes, icons, Wi‑Fi/MQTT, AHT20, RS485 |
-| [CUSTOMER_API_GUIDE.md](./CUSTOMER_API_GUIDE.md) | API guide entry |
-| [api_guide/zh/10_gpio_rs485.md](./api_guide/zh/10_gpio_rs485.md) | RS485 / DE |
-| [api_guide/en/README.md](./api_guide/en/README.md) | English API guide index |
 | GitHub sample | [Portworld-tech/43p-esp32-neutral-software](https://github.com/Portworld-tech/43p-esp32-neutral-software) |
 | Theme preview | [GitHub Pages](https://portworld-tech.github.io/43p-esp32-neutral-software/) |
 
