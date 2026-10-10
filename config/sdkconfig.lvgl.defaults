@@ -1,10 +1,7 @@
- LVGL 8.x (lvgl__lvgl) — load after sdkconfig.common via SDKCONFIG_DEFAULTS.
+# LVGL 8.x (lvgl__lvgl) — load after sdkconfig.common via SDKCONFIG_DEFAULTS.
 # "unknown kconfig symbol" warnings during early configure are normal until lvgl Kconfig is merged.
+# Do NOT set LVGL9-only options here (LV_USE_CLIB_*, LV_OS_FREERTOS) — they break configure on LVGL 8.4.
 
-CONFIG_LV_USE_CLIB_MALLOC=y
-CONFIG_LV_USE_CLIB_STRING=y
-CONFIG_LV_USE_CLIB_SPRINTF=y
-CONFIG_LV_OS_FREERTOS=y
 CONFIG_LV_ATTRIBUTE_FAST_MEM_USE_IRAM=y
 CONFIG_LV_DISP_DEF_REFR_PERIOD=12
 CONFIG_LV_INDEV_DEF_READ_PERIOD=10

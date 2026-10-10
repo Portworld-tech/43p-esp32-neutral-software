@@ -1,4 +1,4 @@
-﻿# Shared ESP32-S3 + LVGL + Withthewind RGB defaults for lvglframe monorepo.
+# Shared ESP32-S3 + LVGL + Withthewind RGB defaults for lvglframe monorepo.
 # Layered via SDKCONFIG_DEFAULTS in root / esp32_s3_frame CMakeLists.txt (project-specific files override).
 
 CONFIG_ESPTOOLPY_FLASHMODE_QIO=y

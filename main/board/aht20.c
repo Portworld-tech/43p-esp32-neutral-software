@@ -1,4 +1,5 @@
 #include "aht20.h"
+#include "aht20_calib.h"
 
 #include "sdkconfig.h"
 
@@ -76,6 +77,30 @@ static esp_err_t aht20_calibrate(void)
     return ESP_OK;
 }
 
+static void aht20_apply_customer_calib(float *temp_c, float *rh_pct)
+{
+#if AHT20_CALIB_ENABLE
+    if (temp_c != NULL) {
+        *temp_c = (*temp_c) * (float)AHT20_TEMP_SCALE + (float)AHT20_TEMP_OFFSET_C;
+    }
+    if (rh_pct != NULL) {
+        float rh = (*rh_pct) * (float)AHT20_RH_SCALE + (float)AHT20_RH_OFFSET_PCT;
+#if AHT20_RH_CLAMP
+        if (rh < 0.0f) {
+            rh = 0.0f;
+        }
+        if (rh > 100.0f) {
+            rh = 100.0f;
+        }
+#endif
+        *rh_pct = rh;
+    }
+#else
+    (void)temp_c;
+    (void)rh_pct;
+#endif
+}
+
 esp_err_t aht20_init(i2c_master_bus_handle_t bus)
 {
     if (bus == NULL) {
@@ -117,11 +142,15 @@ esp_err_t aht20_init(i2c_master_bus_handle_t bus)
     }
 
     s_aht20_ready = true;
-    ESP_LOGI(TAG, "ready on I2C 0x%02x (%d Hz)", CONFIG_AHT20_I2C_ADDR, CONFIG_AHT20_I2C_HZ);
+    ESP_LOGI(TAG, "ready on I2C 0x%02x (%d Hz); calib=%d T=%g*%g R=%g*%g",
+             CONFIG_AHT20_I2C_ADDR, CONFIG_AHT20_I2C_HZ,
+             (int)AHT20_CALIB_ENABLE,
+             (double)AHT20_TEMP_SCALE, (double)AHT20_TEMP_OFFSET_C,
+             (double)AHT20_RH_SCALE, (double)AHT20_RH_OFFSET_PCT);
     return ESP_OK;
 }
 
-esp_err_t aht20_read(float *temp_c, float *rh_pct)
+esp_err_t aht20_read_raw(float *temp_c, float *rh_pct)
 {
     if (temp_c == NULL && rh_pct == NULL) {
         return ESP_ERR_INVALID_ARG;
@@ -159,6 +188,15 @@ esp_err_t aht20_read(float *temp_c, float *rh_pct)
     return ESP_OK;
 }
 
+esp_err_t aht20_read(float *temp_c, float *rh_pct)
+{
+    esp_err_t err = aht20_read_raw(temp_c, rh_pct);
+    if (err == ESP_OK) {
+        aht20_apply_customer_calib(temp_c, rh_pct);
+    }
+    return err;
+}
+
 esp_err_t aht20_read_temperature_c(float *temp_c)
 {
     return aht20_read(temp_c, NULL);
@@ -174,6 +212,13 @@ esp_err_t aht20_read_humidity_rh(float *rh_pct)
 esp_err_t aht20_init(i2c_master_bus_handle_t bus)
 {
     (void)bus;
+    return ESP_ERR_NOT_SUPPORTED;
+}
+
+esp_err_t aht20_read_raw(float *temp_c, float *rh_pct)
+{
+    (void)temp_c;
+    (void)rh_pct;
     return ESP_ERR_NOT_SUPPORTED;
 }
 

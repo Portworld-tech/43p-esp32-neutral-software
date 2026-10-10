@@ -10,3 +10,9 @@ CONFIG_LV_FS_POSIX_CACHE_SIZE=32768
 CONFIG_LV_USE_PNG=y
 CONFIG_LV_IMG_CACHE_DEF_SIZE=16
 CONFIG_LV_FONT_SIMSUN_16_CJK=y
+
+# LVGL9-only optional codecs: keep unset on LVGL 8.4 so idf-component-manager
+# if-rules can resolve (must also exist as symbols via main/Kconfig.projbuild).
+# CONFIG_LV_USE_LIBJPEG_TURBO is not set
+# CONFIG_LV_USE_LIBPNG is not set
+# CONFIG_LV_USE_LZ4 is not set

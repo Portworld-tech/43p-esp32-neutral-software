@@ -12,6 +12,9 @@ void ui_bg_task_init(void);
 /** Queue temperature NVS write; returns false if queue full (caller may retry later). */
 bool ui_bg_task_post_save_temps(int screen3_temp, int screen5_temp);
 
+/** True after at least one successful AHT20 sample this boot (false if disabled/absent). */
+bool ui_bg_task_indoor_ready(void);
+
 #if defined(CONFIG_AHT20_ENABLE) && CONFIG_AHT20_ENABLE
 /** Last polled indoor temperature (°C rounded), or 999999 if unknown. Thread-safe read. */
 int ui_bg_task_get_indoor_temp_cached(void);

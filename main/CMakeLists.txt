@@ -62,6 +62,7 @@ set(MAIN_SRCS
 
 set(MAIN_INCLUDE_DIRS
         .
+        board
         app
         gui
         fonts

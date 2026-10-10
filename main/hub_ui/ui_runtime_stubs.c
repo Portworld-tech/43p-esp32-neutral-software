@@ -5,6 +5,9 @@
 
 #include <string.h>
 
+/* Closed libbt_ctrl.a calls this from bt_management_start(); keep the TU linked. */
+void bt_switch_control_linker_keep(void) {}
+
 void ui_runtime_apply(void) {}
 void ui_runtime_disable_btn_grow_everywhere(void) {}
 void ui_runtime_disable_btn_grow_on(lv_obj_t *root) { (void)root; }

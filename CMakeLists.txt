@@ -1,11 +1,22 @@
 ﻿cmake_minimum_required(VERSION 3.19)
 
-# Customer SDK 鈥?no vendor pin profile in SDKCONFIG_DEFAULTS.
+# Customer SDK — no vendor pin profile in SDKCONFIG_DEFAULTS.
 set(SDKCONFIG_DEFAULTS
     "${CMAKE_CURRENT_LIST_DIR}/config/sdkconfig.common.defaults"
     "${CMAKE_CURRENT_LIST_DIR}/config/sdkconfig.lvgl.defaults"
     "${CMAKE_CURRENT_LIST_DIR}/sdkconfig.defaults"
 )
+
+# Re-pin managed esp_lvgl_port -> lvgl 8.4.* after component downloads (IDF 5.5).
+# Wide ">=8,<10" makes component-manager evaluate LVGL9 optional deps and fail.
+execute_process(
+    COMMAND python "${CMAKE_CURRENT_LIST_DIR}/tools/pin_esp_lvgl_port_lvgl.py"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+    RESULT_VARIABLE _pin_lvgl_rc
+)
+if(NOT _pin_lvgl_rc EQUAL 0)
+    message(WARNING "pin_esp_lvgl_port_lvgl.py failed (rc=${_pin_lvgl_rc})")
+endif()
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 add_compile_options(-Wno-format)

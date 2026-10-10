@@ -1,4 +1,25 @@
-# Customer SDK application Kconfig (no vendor GPIO pin map 鈥?pins live in board_bsp.a).
+# Customer SDK application Kconfig (no vendor GPIO pin map - pins live in board_bsp.a).
+
+# Safety stubs if component-manager still evaluates LVGL9 optional codec rules.
+menu "LVGL9 codec stubs (keep off on LVGL 8.4)"
+
+    config LV_USE_LIBJPEG_TURBO
+        bool "Stub: LV_USE_LIBJPEG_TURBO (LVGL9 only)"
+        default n
+
+    config LV_USE_LIBPNG
+        bool "Stub: LV_USE_LIBPNG (LVGL9 only)"
+        default n
+
+    config LV_USE_LZ4
+        bool "Stub: LV_USE_LZ4 (LVGL9 only)"
+        default n
+
+    config LV_USE_LZ4_INTERNAL
+        bool "Stub: LV_USE_LZ4_INTERNAL (LVGL9 only)"
+        default n
+
+endmenu
 
 menu "Wi-Fi station"
 

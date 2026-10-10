@@ -32,7 +32,8 @@ idf.py -p COMx flash monitor
 
 ESP-IDF **5.5.x**, target **esp32s3**. Flash must include the **storage (SPIFFS)** partition so icons appear.
 
-More detail: [docs/THEME_SECONDARY_DEV.md](docs/THEME_SECONDARY_DEV.md).
+More detail: [docs/THEME_SECONDARY_DEV.md](docs/THEME_SECONDARY_DEV.md).  
+Customer FAQ (CN/EN): [docs/CUSTOMER_FAQ_CN.md](docs/CUSTOMER_FAQ_CN.md) · [docs/CUSTOMER_FAQ_EN.md](docs/CUSTOMER_FAQ_EN.md).
 
 ---
 
@@ -75,13 +76,15 @@ After Pages is enabled on this repo (source: `/lvgl-front` or `docs` workflow), 
 
 ### AHT20 temperature and humidity
 
-Enable `CONFIG_AHT20_ENABLE`. Open source driver: `main/board/aht20.c`.
+Enable `CONFIG_AHT20_ENABLE`. Open source driver: `main/board/aht20.c`.  
+Field offset: edit macros in `main/board/aht20_calib.h` (`out = raw * SCALE + OFFSET`), then rebuild.
 
 ```c
 #include "aht20.h"
 float t = 0, rh = 0;
 aht20_init(board_i2c_get_handle());
-aht20_read(&t, &rh);   /* 掳C and %RH */
+aht20_read(&t, &rh);       /* calibrated C and %RH */
+aht20_read_raw(&t, &rh);   /* uncalibrated */
 ```
 
 Background task writes `hub_model()->indoor_c` / `hub_model()->rh`; Hub themes refresh automatically.

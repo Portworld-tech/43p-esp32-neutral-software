@@ -284,6 +284,15 @@ bool ui_bg_task_post_save_temps(int screen3_temp, int screen5_temp)
     return true;
 }
 
+bool ui_bg_task_indoor_ready(void)
+{
+#if defined(CONFIG_AHT20_ENABLE) && CONFIG_AHT20_ENABLE
+    return s_indoor_cached != 999999 && s_rh_cached != 999999;
+#else
+    return false;
+#endif
+}
+
 #if defined(CONFIG_AHT20_ENABLE) && CONFIG_AHT20_ENABLE
 int ui_bg_task_get_indoor_temp_cached(void)
 {

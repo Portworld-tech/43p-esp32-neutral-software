@@ -12,6 +12,7 @@
 | 目标 | 打开 |
 |------|------|
 | 人读：怎么二次开发 | [00_secondary_dev.md](./api_guide/zh/00_secondary_dev.md) |
+| **售前 / 硬件 FAQ** | [中文 CN](./CUSTOMER_FAQ_CN.md) · [English](./CUSTOMER_FAQ_EN.md) · [排版版](./CUSTOMER_FAQ.md) |
 | **AI 辅助开发** | [AI_DEV.md](./api_guide/zh/AI_DEV.md) + 置顶 [AI_CONTEXT.md](./api_guide/zh/AI_CONTEXT.md) |
 | 屏控 Modbus 设备 | [G01](./api_guide/zh/guides/G01_modbus_rs485_lvgl.md) + `main/app/examples/` |
 | 选产品方向 | [G00](./api_guide/zh/guides/G00_directions.md) |

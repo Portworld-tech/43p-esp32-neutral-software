@@ -7,6 +7,7 @@
 #include "hub_icons.h"
 #include "hub_i18n.h"
 #include "app_ui.h"
+#include "ui_bg_task.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -61,6 +62,7 @@ void build_home(lv_obj_t *parent)
         lv_obj_center(l);
     }
 
+    /* Metrics: power + AHT20 indoor T/RH (hub_model filled by ui_bg_task). */
     lv_obj_t *metrics = lv_obj_create(root);
     lv_obj_remove_style_all(metrics);
     lv_obj_set_width(metrics, LV_PCT(100));
@@ -69,13 +71,20 @@ void build_home(lv_obj_t *parent)
     lv_obj_set_style_pad_column(metrics, 8, 0);
     char mv0[24], mv1[24], mv2[24];
     snprintf(mv0, sizeof(mv0), "%.1fkW", (double)m->power_kw);
-    snprintf(mv1, sizeof(mv1), "%.1f°", (double)m->indoor_c);
-    snprintf(mv2, sizeof(mv2), "%d%%", m->rh);
+    const bool aht_ok = ui_bg_task_indoor_ready();
+    if (aht_ok) {
+        snprintf(mv1, sizeof(mv1), "%.1f°C", (double)m->indoor_c);
+        snprintf(mv2, sizeof(mv2), "%d%%", m->rh);
+    } else {
+        /* Avoid showing hub_model demo defaults before the first AHT20 sample. */
+        snprintf(mv1, sizeof(mv1), "--.-°C");
+        snprintf(mv2, sizeof(mv2), "--%%");
+    }
     const char *mvs[] = { mv0, mv1, mv2 };
     const char *mls[] = {
         hub_tr("功率", "Power"),
-        hub_tr("室内", "Indoor"),
-        hub_tr("湿度", "RH"),
+        hub_tr("温度", "Temp"),
+        hub_tr("湿度", "Humidity"),
     };
     hub_route_t mrs[] = { HUB_ROUTE_ENERGY, HUB_ROUTE_HVAC, HUB_ROUTE_HVAC };
     for (int i = 0; i < 3; i++) {
@@ -88,7 +97,9 @@ void build_home(lv_obj_t *parent)
         lv_obj_add_event_cb(c, go_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)mrs[i]);
         lv_obj_t *v = lv_label_create(c);
         lv_label_set_text(v, mvs[i]);
-        hub_style_label(v, p->accent, hub_font());
+        /* Accent when live; muted until AHT20 has delivered a sample. */
+        const lv_color_t vc = (i > 0 && !aht_ok) ? p->t3 : p->accent;
+        hub_style_label(v, vc, hub_font());
         lv_obj_align(v, LV_ALIGN_TOP_MID, 0, 8);
         lv_obj_t *l = lv_label_create(c);
         lv_label_set_text(l, mls[i]);
